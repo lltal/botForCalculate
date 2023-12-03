@@ -24,6 +24,7 @@ public class CalculateCallback implements Callback {
     public List<? extends BotApiMethod<? extends Serializable>> executeCallback(CallbackQuery callbackQuery) {
         String queryId = callbackQuery.getId();
         Long who = callbackQuery.getFrom().getId();
+
         AnswerCallbackQuery close = AnswerCallbackQuery.builder()
                 .callbackQueryId(queryId).build();
 

@@ -4,8 +4,10 @@ import com.github.lltal.task2.UI.Currencies;
 import com.github.lltal.task2.events.Event;
 import com.github.lltal.task2.events.impl.CurrencyTypeEvent;
 import com.github.lltal.task2.handlers.callbacks.Callback;
+import com.github.lltal.task2.producers.impl.CurrencyTypeEventProducer;
 import com.github.lltal.task2.repositories.EventRepository;
 import jakarta.annotation.PostConstruct;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -23,6 +25,8 @@ public class CurrencyTypeCallback implements Callback {
     private final Map<String, Currencies> currencies = new HashMap<>();
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private CurrencyTypeEventProducer currencyTypeEventProducer;
 
     @PostConstruct
     private void init() {
@@ -41,7 +45,7 @@ public class CurrencyTypeCallback implements Callback {
                 .map(Map.Entry::getValue)
                 .toList();
 
-        Event<?> event = new CurrencyTypeEvent(filteredCurrencies.get(0));
+        Event<?> event = currencyTypeEventProducer.produce(filteredCurrencies.get(0));
 
         eventRepository.saveEvent(who, event);
 
